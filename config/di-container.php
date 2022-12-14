@@ -1,0 +1,6 @@
+<?php
+
+$settings = [
+];
+
+return $settings;

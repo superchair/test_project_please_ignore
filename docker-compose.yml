@@ -2,18 +2,21 @@ version: '3.8'
 
 services:
   webserver:
-    user: "${USER_INFO}"
+    user: 1000:1000
     hostname: test_project_please_ignore
     build:
       context: ./docker
       dockerfile: Dockerfile.webserver
     volumes:
-      - ./vendor:/var/www/vendor
-      - ./:/var/www
+      - type: bind
+        source: ./
+        target: /var/www
+        bind:
+          create_host_path: true
       - composer-cache:/root/.composer/cache
       - $HOME/.aws:/root/.aws
       - $HOME/.aws:/.aws
-    command: sh -c "apache2-foreground"
+    command: sh -c "composer install && apache2-foreground"
 
 volumes:
   composer-cache:
