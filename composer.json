@@ -1,0 +1,12 @@
+{
+    "name": "superchair/test_project_please_ignore",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Superchair\\TestProjectPleaseIgnore\\": "src/"
+        }
+    },
+    "require": {
+        "slim/slim": "4.*"
+    }
+}
