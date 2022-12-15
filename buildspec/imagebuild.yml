@@ -13,7 +13,7 @@ phases:
   build:
     commands:
       # build docker image
-      - docker build -t test_project_please_ignore:latest .
+      - docker build -f docker/Dockerfile.webserver -t test_project_please_ignore:latest .
   post_build:
     commands:
       - docker tag test_project_please_ignore:latest ${ECR_IMAGE_URI}
