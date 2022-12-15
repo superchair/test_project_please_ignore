@@ -1,4 +1,4 @@
-version: 2.0
+version: 0.2
 env:
   variables:
     ECR_REPO_NAME: test_project_please_ignore
