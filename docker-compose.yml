@@ -7,8 +7,8 @@ services:
     ports:
       - "80:80"
     build:
-      context: ./docker
-      dockerfile: Dockerfile.webserver
+      context: ./
+      dockerfile: ./docker/Dockerfile.webserver
     volumes:
       - type: bind
         source: ./
