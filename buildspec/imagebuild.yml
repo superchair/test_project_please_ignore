@@ -13,9 +13,8 @@ phases:
   build:
     commands:
       # build docker image
-      - docker build -f docker/Dockerfile.webserver -t test_project_please_ignore:latest -t test_project_please_ignore:${CODEBUILD_BUILD_NUMBER} ./docker
+      - docker build -f docker/Dockerfile.webserver -t test_project_please_ignore:latest ./docker
   post_build:
     commands:
       - docker tag test_project_please_ignore:latest ${ECR_IMAGE_URI}
-      - docker tag test_project_please_ignore:${CODEBUILD_BUILD_NUMBER} ${ECR_IMAGE_URI}
       - docker push ${ECR_IMAGE_URI}
