@@ -24,5 +24,7 @@ RUN a2enmod headers
 # Copy vhost.conf
 COPY apache.vhost.conf /etc/apache2/sites-available/000-default.conf
 
+COPY ./ /var/www
+
 # Set working directory
 WORKDIR /var/www

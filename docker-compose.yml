@@ -4,6 +4,8 @@ services:
   webserver:
     user: 1000:1000
     hostname: test_project_please_ignore
+    ports:
+      - "80:80"
     build:
       context: ./docker
       dockerfile: Dockerfile.webserver
