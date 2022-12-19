@@ -7,8 +7,9 @@ services:
     ports:
       - "80:80"
     build:
-      context: ./
+      context: .
       dockerfile: ./docker/Dockerfile.webserver
+      target: dev
     volumes:
       - type: bind
         source: ./
@@ -19,7 +20,7 @@ services:
       - $HOME/.aws:/root/.aws
       - $HOME/.aws:/.aws
     command: sh -c "composer install && apache2-foreground"
-
+  
 volumes:
   composer-cache:
     external:

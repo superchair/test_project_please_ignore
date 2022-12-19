@@ -1,10 +1,8 @@
-FROM php:8.2-apache
+# base image - PHP configuration
+FROM php:8.2-apache AS base
 
-# Run PHP in development mode (TODO how do we _not_ do this for prod?)
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
-
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=2.4.4
+# Set working directory
+WORKDIR /var/www
 
 # Install System Dependencies
 RUN apt-get update && \
@@ -21,12 +19,48 @@ RUN echo 'memory_limit = 256M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.
 RUN a2enmod rewrite
 RUN a2enmod headers
 
-# Copy app files
-COPY . /var/www
-
 # Copy vhost.conf
 COPY ./docker/apache.vhost.conf /etc/apache2/sites-available/000-default.conf
 
 
-# Set working directory
+
+# build php dependencies
+FROM composer:2.4.4 AS build
+
+# set working directory
+WORKDIR /app
+
+# copy composer files
+COPY composer.json .
+COPY composer.lock .
+
+# Use composer to build dependencies
+RUN composer install --no-dev --no-scripts --ignore-platform-reqs
+
+# copy the rest of the app files
+COPY . .
+
+# finalize build
+RUN composer dumpautoload --optimize
+
+
+
+# final production image
+FROM base AS prod
+
+# Copy app files
+COPY --from=build /app /var/www
+
+
+
+# final dev-env image
+FROM base as dev
+
+# set working directory
 WORKDIR /var/www
+
+# Run PHP in development mode
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=2.4.4
